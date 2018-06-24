@@ -27,6 +27,7 @@ tree ./git/rr-cache
     # Return a recent log of what git is doing   
 
 
+
 Getting a Git Repository
 -----------------------------------------------------
 ### How to add a git repository manually without cloning ###
