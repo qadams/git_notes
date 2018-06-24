@@ -1,0 +1,272 @@
+Git Notes
+
+Configure your identity
+------------------------------------------------------
+git config --global user.name "Quinn Adams"
+git config --global user.email "qadams@unomaha.edu"
+git config --global core.editor vim
+    # On windows you must specify the whole path
+        # git config --global core.editor "'C:/Program Files/Notepad++/notepad++.exe' -multiInst -nosession"
+
+git config --list
+    # Lists all config settings that git can find
+git config <key>
+    # git config user.name 
+        # Returns the user.name key, "Quinn Adams" as an example
+git config --show-origin rerere.autoupdate
+    # Returns which configuration file is being used for the specified option
+        # Will return "file:/home/adamsqu/.gitconfig false" for an example
+        # rerere.autoupdate records the changes you made to resolve a given conflict and can reapply it later
+            # when you get a merge conflict
+            # git config --global rerere.enabled true
+                # This enables rerere
+git rerere status
+    # Tells us what fingerprint file is causing a merge conflict
+
+tree ./git/rr-cache
+    # Return a recent log of what git is doing   
+
+
+Getting a Git Repository
+-----------------------------------------------------
+### How to add a git repository manually without cloning ###
+cd /home/adamsqu/my_project
+git init
+    # Creates a new subdirectory named .git
+git add *.c
+git commit -m "Initial prject commit"
+
+### How to cline an existing repository ###
+cd /home/adamsqu/
+git clone <url>
+    # Creates a directory named libgit2, initializes a .git directory inside it, pulls down all data for the repo, and checks out a working copy
+git clone <url> <preffered_dir_name>
+    # Creates a directory clone with the preferred name
+
+
+Recording Changes to the Repository
+-----------------------------------------------------
+# Git will see files as untracked, unmodified, modified, staged
+git status
+    # Check the status of your files in a given branch
+
+git diff 
+    # Command compares what is in your working directory with what is in your staging area
+git diff --staged
+    # Compares your staged changes to last commit
+git diff --cached
+    # see what you've staged so far
+
+
+Committing Your Changes and Removing Changes
+----------------------------------------------------
+git commit -m "Commit with a message attached"
+git rm file
+    # Next time you commit, file will be gone and no longer tracked
+    # if you modified the file and added it to the staging are already, you must give it the force flag -f
+git rm --cached file
+    # remove file from staging area but keep it in working tree
+
+
+Moving Files
+------------------------------------------------------
+git mv file newFile
+    # Equivalent to renaming file, removing old file in git and adding new file in git
+
+
+Viewing Commit History
+-------------------------------------------------------------
+git log
+    # View commit history: Most recents commits show first
+git log -p -2
+    # Shows the difference (patch output) introduced un each commit: -2 denotes number of entries
+git log --pretty=oneline
+    # Pretty output for logged commit history
+git log --stat
+    # Shortened output of log command
+git log --pretty=format:"%h - %an, %ar : %s"
+    # formats log entries: 
+        # ca82a6d - Quinn Adams, 6 years ago : Changed the version number and newest commit
+        # ca8226d - Quinn Adams, 7 years ago : Removed Unnecessary Test
+        # c44346d - Quinn Adams, 8 years ago : first commit  
+# NOTE: Author is the person who originally wrote the work. Commiter is the person who last applied the work.
+
+
+
+Undoing Things
+-------------------------------------------------------------
+git commit --amend
+    # Replace your last commit with new commit
+
+
+Unstaging a staged file
+------------------------------------------------------------
+git reset HEAD <file>
+    # Unstage a specified file
+git checkout -- <file>
+    # Unmodify changes to a file so it reverts back to what it was last commit
+
+
+Showing your remotes
+------------------------------------------------------------
+git remote
+    # see which remote servers you have configured
+git remote -v 
+    # Gives the url to the remote repository as well: origin <url>
+git remote add <shortname> <url>
+    # add new remote git repository
+git fetch <shortname>
+    # Fetch all information that a repository remote has
+    # fetches any new work that has been pushed to that server but does not merge
+    # NOTE: Allows you to merge later when you want to merge and doesn't change your local working tree
+git push <remote> <branch>
+    # pushes to the remote and branch specified
+    # If two people clone from a branch and no one has pushed in the meantime, 
+        # and a person pushes upstream before you, your push is rejected
+git remote show <remote>
+    # Show more information about a remote
+git remote rename <old_remote_name> <new_remote_name> 
+git remote remove <remote>
+    # Remove specified remote
+
+
+
+Git Tagging
+------------------------------------------------------------
+### Tags are used to point back to a specific time in history such as a commit. Good for organized version controlling ###
+git tag
+    # List available tags in git
+git tag -l "v1.8.5*"
+    # Search for tags
+git tag -a <tagName> -m "message for tag"
+    # Created an annotated tag
+git show <tagName>
+    # Show information about a tag
+git tag -a <tagName> <commitHash>
+    # Tag a commit for future use
+git push origin <tagName>
+    # Share the tag to the remote repository
+git push origin --tags
+    # Share many tags to remote repository
+git checkout -b <branch> <tagName>
+    # checkout a new branch with a specified commit by specifying the tagName 
+
+
+
+Git Aliases
+---------------------------------------------------------------
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+    # Creating aliases for various git commands
+    # Example:
+        # git st 
+            # same as git status
+git config --global alias.unstage 'reset HEAD --'
+    # Makes following commands equivalent
+        # git unstage <file>
+        # git reset HEAD -- <file>
+git config --global alias.last 'log -1 HEAD'
+    # See the last commit made easily
+    # Usage: 
+         # git last
+git config --global alias.visual '!gitk'
+    # Run gitk's visual command instead of git's visual command
+
+
+Creating a new Branch
+--------------------------------------------------------------
+git checkout -b <new_branch> 
+    # Create new branch
+### Note: HEAD moves when you checkout new branch. HEAD is used to track commits ###
+
+git log --oneline --decorate --graph --all
+    # Show commit history and where branch pointers are
+
+
+Merging your branch
+---------------------------------------------------------------
+###  Merge featureBranch into master ###
+git checkout master
+git merge featureBranch
+
+
+
+Deleting your branch
+--------------------------------------------------------------
+git branch -d featureBranch
+    # Delete featureBranch after it is no longer needed and merged accordingly
+
+
+Merge Conflicts
+-------------------------------------------------------------
+### Usually happens when you changed the same part of the same file differently in the two branches you're merging together ###
+# Resolve your merge by choosing which parts you want to keep of each file by opening the file and choosing what you want to remove
+# Then do : git add <file>
+git mergetool
+    # Handy graphical merge tool
+# Make sure all merges are fixed by running git status
+# Then run a : git commit -m "Message"
+
+
+Branch Management Commands
+-------------------------------------------------------------
+git branch
+    # Get listing of current branches
+    # * means what branch you are currently on (AKA what HEAD is pointing to)
+git branch -v 
+    # See last commit on each branch
+git branch --merged
+    # See what branches have been merged into branch you're on
+git branch --no-merged
+    # see what branches you have not merged into the current branch
+git branch -D <branch>
+    # Force a branch to be deleted without merging it in
+
+
+Git Branch Workflow
+------------------------------------------------------------
+# There are master branches, develop branches, and topic branches
+# Master branches are used for release and fully working release code
+# Develop Branches are used to test stability
+# Topic branches are short-lived branches to create new features and to be merged into master
+git fetch origin 
+    # Synchronize your work
+git push -u origin <RemoteBranch>
+    # Fix tracking remote branch so you can, 
+        # git push
+              # Only have to specifiy -u once in order to set up tracking this way
+git push origin --delete <remoteBranch>
+    # Delete a remote branch that is no longer needed after a merge has taken place
+
+
+Git Branch Rebasing
+------------------------------------------------------------
+### REWRITTING COMMIT HISTORY ###
+git checkout experiment 
+git rebase master
+git checkout master
+git merge experiment
+
+Explanation: 
+1) Goes to common ancestory of the two branches (current branch and branch rebasing onto)
+2) Gets the diff introduced by each commit the branch you're on and saves diffs to temporary files
+3) Resets current branch to same commit as the branch rebasing onto
+
+
+git rebase --onto master server client
+git checkout master
+git merge client
+    # Says, "Take client branch, figure out patches since it diverged from the server branch, and
+        # replay these patches in the client branch as if it was based directly off the master branch 
+            # instead"
+
+
+
+git rebase <baseBranch> <topic branch>
+    # Example: git rebase master server
+git checkout master 
+git merge server
+    # Example: git rebase master server
+    # Replays server work on top of your master work
