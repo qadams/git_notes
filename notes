@@ -51,7 +51,6 @@ Recording Changes to the Repository
 # Git will see files as untracked, unmodified, modified, staged
 git status
     # Check the status of your files in a given branch
-
 git diff 
     # Command compares what is in your working directory with what is in your staging area
 git diff --staged
