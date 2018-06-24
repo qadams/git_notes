@@ -37,7 +37,7 @@ git add *.c
 git commit -m "Initial prject commit"
 git remote add origin <url>
 git push -u origin master
-### How to cline an existing repository ###
+### How to clone an existing repository ###
 cd /home/adamsqu/
 git clone <url>
     # Creates a directory named libgit2, initializes a .git directory inside it, pulls down all data for the repo, 
