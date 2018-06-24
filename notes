@@ -35,11 +35,13 @@ git init
     # Creates a new subdirectory named .git
 git add *.c
 git commit -m "Initial prject commit"
-
+git remote add origin <url>
+git push -u origin master
 ### How to cline an existing repository ###
 cd /home/adamsqu/
 git clone <url>
-    # Creates a directory named libgit2, initializes a .git directory inside it, pulls down all data for the repo, and checks out a working copy
+    # Creates a directory named libgit2, initializes a .git directory inside it, pulls down all data for the repo, 
+        # and checks out a working copy
 git clone <url> <preffered_dir_name>
     # Creates a directory clone with the preferred name
 
@@ -201,8 +203,12 @@ git branch -d featureBranch
 
 Merge Conflicts
 -------------------------------------------------------------
-### Usually happens when you changed the same part of the same file differently in the two branches you're merging together ###
-# Resolve your merge by choosing which parts you want to keep of each file by opening the file and choosing what you want to remove
+### Usually happens when you changed the same part of the same file differently in the 
+    two branches you're merging together 
+###
+
+# Resolve your merge by choosing which parts you want to keep of each file by opening the 
+      # file and choosing what you want to remove
 # Then do : git add <file>
 git mergetool
     # Handy graphical merge tool
