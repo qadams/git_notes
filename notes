@@ -46,6 +46,7 @@ git clone <url> <preffered_dir_name>
     # Creates a directory clone with the preferred name
 
 
+
 Recording Changes to the Repository
 -----------------------------------------------------
 # Git will see files as untracked, unmodified, modified, staged
